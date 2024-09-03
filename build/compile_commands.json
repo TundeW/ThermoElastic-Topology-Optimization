@@ -1,0 +1,47 @@
+[
+{
+  "directory": "/root/DEV/FEA Based Solver/FEA Based Solver/build",
+  "command": "/usr/bin/g++ -DTBB_USE_DEBUG -Dkiss_fft_scalar=double -I/mnt/c/Users/wbello3/toolbox/eigen-3.4.0 -isystem /usr/include/vtk-9.1  -Wall -std=c++20 -fopenmp -g -fopenmp -o CMakeFiles/HeatExchanger.dir/src/main.cpp.o -c \"/root/DEV/FEA Based Solver/FEA Based Solver/src/main.cpp\"",
+  "file": "/root/DEV/FEA Based Solver/FEA Based Solver/src/main.cpp"
+},
+{
+  "directory": "/root/DEV/FEA Based Solver/FEA Based Solver/build",
+  "command": "/usr/bin/g++ -DTBB_USE_DEBUG -Dkiss_fft_scalar=double -I/mnt/c/Users/wbello3/toolbox/eigen-3.4.0 -isystem /usr/include/vtk-9.1  -Wall -std=c++20 -fopenmp -g -fopenmp -o CMakeFiles/HeatExchanger.dir/src/MeshHelperFunctions.cpp.o -c \"/root/DEV/FEA Based Solver/FEA Based Solver/src/MeshHelperFunctions.cpp\"",
+  "file": "/root/DEV/FEA Based Solver/FEA Based Solver/src/MeshHelperFunctions.cpp"
+},
+{
+  "directory": "/root/DEV/FEA Based Solver/FEA Based Solver/build",
+  "command": "/usr/bin/g++ -DTBB_USE_DEBUG -Dkiss_fft_scalar=double -I/mnt/c/Users/wbello3/toolbox/eigen-3.4.0 -isystem /usr/include/vtk-9.1  -Wall -std=c++20 -fopenmp -g -fopenmp -o CMakeFiles/HeatExchanger.dir/src/FowardAnalysisFunctions.cpp.o -c \"/root/DEV/FEA Based Solver/FEA Based Solver/src/FowardAnalysisFunctions.cpp\"",
+  "file": "/root/DEV/FEA Based Solver/FEA Based Solver/src/FowardAnalysisFunctions.cpp"
+},
+{
+  "directory": "/root/DEV/FEA Based Solver/FEA Based Solver/build",
+  "command": "/usr/bin/g++ -DTBB_USE_DEBUG -Dkiss_fft_scalar=double -I/mnt/c/Users/wbello3/toolbox/eigen-3.4.0 -isystem /usr/include/vtk-9.1  -Wall -std=c++20 -fopenmp -g -fopenmp -o CMakeFiles/HeatExchanger.dir/src/ProjectionHelperFunctions.cpp.o -c \"/root/DEV/FEA Based Solver/FEA Based Solver/src/ProjectionHelperFunctions.cpp\"",
+  "file": "/root/DEV/FEA Based Solver/FEA Based Solver/src/ProjectionHelperFunctions.cpp"
+},
+{
+  "directory": "/root/DEV/FEA Based Solver/FEA Based Solver/build",
+  "command": "/usr/bin/g++ -DTBB_USE_DEBUG -Dkiss_fft_scalar=double -I/mnt/c/Users/wbello3/toolbox/eigen-3.4.0 -isystem /usr/include/vtk-9.1  -Wall -std=c++20 -fopenmp -g -fopenmp -o CMakeFiles/HeatExchanger.dir/src/FeaHelperFunctions.cpp.o -c \"/root/DEV/FEA Based Solver/FEA Based Solver/src/FeaHelperFunctions.cpp\"",
+  "file": "/root/DEV/FEA Based Solver/FEA Based Solver/src/FeaHelperFunctions.cpp"
+},
+{
+  "directory": "/root/DEV/FEA Based Solver/FEA Based Solver/build",
+  "command": "/usr/bin/g++ -DTBB_USE_DEBUG -Dkiss_fft_scalar=double -I/mnt/c/Users/wbello3/toolbox/eigen-3.4.0 -isystem /usr/include/vtk-9.1  -Wall -std=c++20 -fopenmp -g -fopenmp -o CMakeFiles/HeatExchanger.dir/src/ThermalFeaFunction.cpp.o -c \"/root/DEV/FEA Based Solver/FEA Based Solver/src/ThermalFeaFunction.cpp\"",
+  "file": "/root/DEV/FEA Based Solver/FEA Based Solver/src/ThermalFeaFunction.cpp"
+},
+{
+  "directory": "/root/DEV/FEA Based Solver/FEA Based Solver/build",
+  "command": "/usr/bin/g++ -DTBB_USE_DEBUG -Dkiss_fft_scalar=double -I/mnt/c/Users/wbello3/toolbox/eigen-3.4.0 -isystem /usr/include/vtk-9.1  -Wall -std=c++20 -fopenmp -g -fopenmp -o CMakeFiles/HeatExchanger.dir/src/ElasticFeaFunction.cpp.o -c \"/root/DEV/FEA Based Solver/FEA Based Solver/src/ElasticFeaFunction.cpp\"",
+  "file": "/root/DEV/FEA Based Solver/FEA Based Solver/src/ElasticFeaFunction.cpp"
+},
+{
+  "directory": "/root/DEV/FEA Based Solver/FEA Based Solver/build",
+  "command": "/usr/bin/g++ -DTBB_USE_DEBUG -Dkiss_fft_scalar=double -I/mnt/c/Users/wbello3/toolbox/eigen-3.4.0 -isystem /usr/include/vtk-9.1  -Wall -std=c++20 -fopenmp -g -fopenmp -o CMakeFiles/HeatExchanger.dir/src/WriteVtuFunction.cpp.o -c \"/root/DEV/FEA Based Solver/FEA Based Solver/src/WriteVtuFunction.cpp\"",
+  "file": "/root/DEV/FEA Based Solver/FEA Based Solver/src/WriteVtuFunction.cpp"
+},
+{
+  "directory": "/root/DEV/FEA Based Solver/FEA Based Solver/build",
+  "command": "/usr/bin/g++ -DTBB_USE_DEBUG -Dkiss_fft_scalar=double -I/mnt/c/Users/wbello3/toolbox/eigen-3.4.0 -isystem /usr/include/vtk-9.1  -Wall -std=c++20 -fopenmp -g -fopenmp -o CMakeFiles/HeatExchanger.dir/src/WriteOutputFunctions.cpp.o -c \"/root/DEV/FEA Based Solver/FEA Based Solver/src/WriteOutputFunctions.cpp\"",
+  "file": "/root/DEV/FEA Based Solver/FEA Based Solver/src/WriteOutputFunctions.cpp"
+}
+]

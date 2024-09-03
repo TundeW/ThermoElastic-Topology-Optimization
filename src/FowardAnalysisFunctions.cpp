@@ -37,23 +37,55 @@ double ComputeAll(const Eigen::VectorXd x, const MESH myMesh, CAND_OBJ_GRAD& myC
 	MatrixXd Centre = centre.transpose();
     VectorXd Inner_r = x.segment(pipenum*2, pipenum);
     VectorXd Outer_r = x.tail(pipenum);
+	//VectorXd Outer_r = x.segment(pipenum*2, pipenum) + x.tail(pipenum); //Take a look at how this affects sensitivities
 
 	//std::cout << "Centre:\n" << Centre << std::endl;
 	//std::cout << "Inner_r: " << Inner_r << std::endl;
 	//std::cout << "Outer_r: " << Outer_r << std::endl;
 
+	//Geometric Constraints to ensure the pipes remain within the domain
+	Eigen::MatrixXd A = Eigen::MatrixXd::Zero(4*pipenum, x.size());
+	Eigen::MatrixXd B = Eigen::MatrixXd::Zero(4*pipenum, 1);
+	for(int i=0;i<pipenum;i++) 
+  	{	
+		//Constraint 1 Lower Limit: x-direction
+		A(i*4, 2*i) = -1; A(i*4, 2*pipenum + i) = 1; A(i*4, 3*pipenum + i) = 1; B(i*4) = 0;
+		//Constraint 2 Upper Limit: x-direction
+		A(i*4 + 1, 2*i) = 1; A(i*4 + 1, 2*pipenum + i) = 1; A(i*4 + 1, 3*pipenum + i) = 1; B(i*4 + 1) = -myMesh.L; //0.25; //Change 0.25 to mesh.L
+		//Constraint 3 Lower Limit: y-direction
+		A(i*4 + 2, 2*i + 1) = -1; A(i*4 + 2, 2*pipenum + i) = 1; A(i*4 + 2, 3*pipenum + i) = 1; B(i*4 + 2) = 0;
+		//Constraint 3 Upper Limit: y-direction
+		A(i*4 + 3, 2*i + 1) = 1; A(i*4 + 3, 2*pipenum + i) = 1; A(i*4 + 3, 3*pipenum + i) = 1; B(i*4 + 3) = -myMesh.H; //0.1; //Change 0.1 to mesh.H
+    	//f_gx[2 + (i*4) + 2] = -(x[2*i] - x[2*6 + i] - x[3*6 + i]); //gx[2 + (i*4) + 1]
+    	//f_gx[2 + (i*4) + 3] = x[2*i] + x[2*6 + i] + x[3*6 + i] - 0.25; //gx[2 + (i*4) + 2]
+    	//f_gx[2 + (i*4) + 4] = -(x[2*i + 1] - x[2*6 + i] - x[3*6 + i]); //gx[2 + (i*4) + 3] 
+    	//f_gx[2 + (i*4) + 5] = x[2*i + 1] + x[2*6 + i] + x[3*6 + i] - 0.1; //gx[2 + (i*4) + 4]
+  	}
 
-   	std::cout << "Beginning Geometric Projection" << std::endl;
+
+   	//std::cout << "Beginning Geometric Projection" << std::endl;
 	auto start_time = std::chrono::high_resolution_clock::now();
 	GRAD_HELPER_VARS myGrad_Helper_Vars;
 	Eigen::MatrixXd Rho = PipeProjection(Centre, Inner_r, Outer_r, myMesh, myGrad_Helper_Vars);
 	//std::cout << "el: " << el << std::endl;
 
+	//Volume Fraction Constraint
+	Eigen::MatrixXd HF_Vec = Rho.col(0).cwiseProduct(Eigen::MatrixXd::Ones(Rho.rows(), 1) - Rho.col(1));
+	double HF_VolFrac = HF_Vec.sum()/(myMesh.nelx * myMesh.nely * myMesh.nely);
+	Eigen::MatrixXd dHF_VolFrac_dRho1 = - Rho.col(1)/(myMesh.nelx * myMesh.nely * myMesh.nelz);
+	Eigen::MatrixXd dHF_VolFrac_dRho2 = Rho.col(0)/(myMesh.nelx * myMesh.nely * myMesh.nelz);
+	//std::cout << "dHF_VolFrac_dRho1.rows(): " << dHF_VolFrac_dRho1.rows() << ", dHF_VolFrac_dRho1.cols(): " << dHF_VolFrac_dRho1.cols() << std::endl;
+	//std::cout << "myGrad_Helper_Vars.dRho1_dx.rows(): " << myGrad_Helper_Vars.dRho1_dx.rows() << ", myGrad_Helper_Vars.dRho1_dx.cols(): " << myGrad_Helper_Vars.dRho1_dx.cols() << std::endl;
+	Eigen::MatrixXd dHF_VolFracdx = dHF_VolFrac_dRho1.transpose() * myGrad_Helper_Vars.dRho1_dx + dHF_VolFrac_dRho2.transpose() * myGrad_Helper_Vars.dRho2_dx;
+	//std::cout << "*************Hot Fluid Volume Fraction:" << HF_VolFrac << "\n";
+	//std::cout << "*************Hot Fluid Volume Sum:" << HF_Vec.sum() << "\n";
+	//std::cout << "*************Total Mesh Size:" << myMesh.nelx * myMesh.nely * myMesh.nely << "\n";
+
 	//Eigen::MatrixXd Rho = Eigen::MatrixXd::Constant(Rhop.rows(), Rhop.cols(), 0.5);
 	//Rho(el,1) += h;
 	auto end_time = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "PipeProjection time: " << duration.count() << " seconds" << std::endl;
+    //std::cout << "PipeProjection time: " << duration.count() << " seconds" << std::endl;
 	//std::cout << "Rho:\n" << Rho << std::endl;
     //std::cout << "Rho:\n" << Rho.rows() << " x " << Rho.cols() << "\n";
 	//std::cout << "dRho1_dx:\n" << myGrad_Helper_Vars.dRho1_dx << "\n";
@@ -145,10 +177,22 @@ double ComputeAll(const Eigen::VectorXd x, const MESH myMesh, CAND_OBJ_GRAD& myC
 	myMesh.dMaxStress_dx = dfdx;
 	myMesh.dHeatTransferRate_dx = df2dx;*/
 
+	// Saving Stress, Heat Transfer rate and their sensitivities in the globally accessible struct
 	myCAND_OBJ_GRAD.MaxStress = vonMises;
 	myCAND_OBJ_GRAD.HeatTransferRate = f2;
 	myCAND_OBJ_GRAD.dMaxStress_dx = dfdx;
 	myCAND_OBJ_GRAD.dHeatTransferRate_dx = df2dx;
+	// Geometric Constraints to keep circle in domain
+	std::cout << "Design Vector Matrix shape: " << x.rows() << "x" << x.cols() << std::endl;
+	myCAND_OBJ_GRAD.circDom = A*x + B;
+	myCAND_OBJ_GRAD.dcircDom_dx = A;
+	// Volume Fraction Constraints
+	myCAND_OBJ_GRAD.dHF_VolFracdx = dHF_VolFracdx;
+	myCAND_OBJ_GRAD.HF_VolFrac = HF_VolFrac;
+	std::cout << "circDom shape: " << myCAND_OBJ_GRAD.circDom.rows() << "x" << myCAND_OBJ_GRAD.circDom.cols() << std::endl;
+	std::cout << "dcircDom_dx shape: " << myCAND_OBJ_GRAD.dcircDom_dx.rows() << "x" << myCAND_OBJ_GRAD.dcircDom_dx.cols() << std::endl;
+	std::cout << "dMaxStress_dx shape: " << myCAND_OBJ_GRAD.dMaxStress_dx.rows() << "x" << myCAND_OBJ_GRAD.dMaxStress_dx.cols() << std::endl;
+	std::cout << "dHeatTransferRate_dx shape: " << myCAND_OBJ_GRAD.dHeatTransferRate_dx.rows() << "x" << myCAND_OBJ_GRAD.dHeatTransferRate_dx.cols() << std::endl;
 
 	std::cout << "dfdx: " << dfdx<< std::endl;
 

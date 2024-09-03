@@ -153,6 +153,7 @@ double ComputeStress(const Eigen::MatrixXd Rho, const MESH myMesh, const Eigen::
 	MatrixXd U = myFea.U;
 	MatrixXd T = myFea.T;
 	double pnorm = 10;
+	double vonMises_min = 1e-6;
 
 	MatrixXd strain_true;
 	MatrixXd stress_true;
@@ -249,16 +250,21 @@ double ComputeStress(const Eigen::MatrixXd Rho, const MESH myMesh, const Eigen::
 		stress_true.col(i) = D_rho * strain_true.col(i);
 		double rho = 1e-3 + (1 - 1e-3)*(1-Rho(i,0));
 		vonMises(i) = pow(rho,3) * strain_true.col(i).transpose() * D_rho * M * D_rho * strain_true.col(i);
-
+		//if (vonMises(i) == 0) {
+		//	vonMises(i) = 1e-6;
+		//}
+		vonMises(i) = vonMises_min + vonMises(i)*(1-vonMises_min);
 		//MatrixXd stress = Eigen::MatrixXd::Zero(3, nel);
 		
-		MatrixXd DfDu = (pnorm * pow(vonMises(i),pnorm-1) * 2 * pow(rho,3) * B.transpose() * D_rho * M * D_rho * strain_true.col(i));
+		//MatrixXd DfDu = (pnorm * pow(vonMises(i),pnorm-1) * 2 * pow(rho,3) * B.transpose() * D_rho * M * D_rho * strain_true.col(i));
+		MatrixXd DfDu = (pnorm * pow(vonMises(i),pnorm-1) * (1-vonMises_min) * 2 * pow(rho,3) * B.transpose() * D_rho * M * D_rho * strain_true.col(i));
 		for (int ii = 0; ii < edof.cols(); ++ii) {
 			int edof_i = edof(ii);
     		dfdu(edof_i) = dfdu(edof_i) + DfDu(ii);
 		}
 
-		MatrixXd DfDT = pnorm * pow(vonMises(i),pnorm-1) * (-2) * pow(rho,3) * myGrad_Helper_Vars.dstrain_thermaldt[i].transpose() * D_rho * M * D_rho * strain_true.col(i);
+		//MatrixXd DfDT = pnorm * pow(vonMises(i),pnorm-1) * (-2) * pow(rho,3) * myGrad_Helper_Vars.dstrain_thermaldt[i].transpose() * D_rho * M * D_rho * strain_true.col(i);
+		MatrixXd DfDT = pnorm * pow(vonMises(i),pnorm-1) * (1-vonMises_min) * (-2) * pow(rho,3) * myGrad_Helper_Vars.dstrain_thermaldt[i].transpose() * D_rho * M * D_rho * strain_true.col(i);
 		for (int ii = 0; ii < enodes.cols(); ++ii) {
 			int enodes_i = enodes(ii);
     		dfdT(enodes_i) = dfdT(enodes_i) + DfDT(ii);
@@ -269,7 +275,8 @@ double ComputeStress(const Eigen::MatrixXd Rho, const MESH myMesh, const Eigen::
 		MatrixXd alpha = -(1 - 1e-3) * 3 * pow(rho,2) * strain_true.col(i).transpose() * D_rho * M * D_rho * strain_true.col(i);
 		MatrixXd beta = pow(rho,3) * (-2) * myGrad_Helper_Vars.dstrain_thermaldrho1[i].transpose() * D_rho * M * D_rho * strain_true.col(i);
 		MatrixXd gamma = pow(rho,3) * 2 * strain_true.col(i).transpose() * dD_rhodrho1 * M * D_rho * strain_true.col(i);
-		delfdelrho1(i) = pnorm * pow(vonMises(i),pnorm-1) * ( alpha(0,0) + beta(0,0) + gamma(0,0) );
+		//delfdelrho1(i) = pnorm * pow(vonMises(i),pnorm-1) * ( alpha(0,0) + beta(0,0) + gamma(0,0) );
+		delfdelrho1(i) = pnorm * pow(vonMises(i),pnorm-1) * (1-vonMises_min) * ( alpha(0,0) + beta(0,0) + gamma(0,0) );
 
 		if (i == 0 || i == 2 || i == 8 || i == 14) {
 			/*std::cout << "vonMises(i)(" << i << "): " << vonMises(i) << std::endl;
@@ -336,8 +343,8 @@ double ComputeStress(const Eigen::MatrixXd Rho, const MESH myMesh, const Eigen::
 	//std::cout << "vonMises_pow: " << vonMises_pow << std::endl;
 	//std::cout << "phi: " << phi << std::endl;
 
-	/*std::cout << "df_dT: " << df_dT << std::endl;
-	std::cout << "df_du: " << df_du << std::endl;*/
+	//std::cout << "df_dT: " << df_dT << std::endl;
+	//std::cout << "df_du: " << df_du << std::endl;
 
 	//MatrixXd dRf_elduf = myGrad_Helper_Vars.Kel_freefree;
 	Eigen::SparseMatrix<double> dRf_elduf = myGrad_Helper_Vars.Kel_freefree;
