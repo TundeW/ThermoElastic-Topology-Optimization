@@ -10,6 +10,9 @@ struct MESH {
     Eigen::MatrixXd mesh_centers;
     double nel;
     int dim;
+    int conLen;
+    int opt_dim;
+    int opt_iter;
     double L;
     double H;
     double B;
@@ -22,9 +25,14 @@ struct MESH {
     double MaxStress;
 	double HeatTransferRate;
 	double PressureDrop;
+    double HF_VolFrac;
 	Eigen::MatrixXd dMaxStress_dx;
 	Eigen::MatrixXd dHeatTransferRate_dx;
 	Eigen::MatrixXd dPressureDrop_dx;
+    Eigen::MatrixXd circDom;
+	Eigen::MatrixXd dcircDom_dx;
+    Eigen::MatrixXd dHF_VolFracdx;
+    
 };
 
 typedef struct {

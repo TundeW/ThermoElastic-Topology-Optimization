@@ -65,7 +65,7 @@ Eigen::MatrixXd ThermalFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	//MatrixXd P(ndof, 1);
 	//MatrixXd Kg;
 	//Kg = MatrixXd::Zero(ndof, ndof); //Change 8 to 2**dim
-	std::cout << "Creating Themal Stiffness Sparse Matrix" << std::endl;
+	//***std::cout << "Creating Themal Stiffness Sparse Matrix" << std::endl;
 	/*Eigen::SparseMatrix<double> Kg(ndof, ndof);
 	Kg.reserve(VectorXi::Constant(ndof,27));
 
@@ -324,7 +324,7 @@ Eigen::MatrixXd ThermalFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 
 	auto end_time = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Thermal Stiffness Assembly time: " << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Thermal Stiffness Assembly time: " << duration.count() << " seconds" << std::endl;
 	//std::cout << "Kg: \n" << Kg << std::endl;
 
 	//Boundary Conditions
@@ -400,7 +400,7 @@ Eigen::MatrixXd ThermalFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	MatrixXi freedofs = freeDofs.transpose();
 	end_time = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Defining Boundary Conditions time: " << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Defining Boundary Conditions time: " << duration.count() << " seconds" << std::endl;
 	
 	// Convection 
 	start_time = std::chrono::high_resolution_clock::now();
@@ -514,7 +514,7 @@ Eigen::MatrixXd ThermalFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	}
 	end_time = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Defining Convection Matrices time: " << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Defining Convection Matrices time: " << duration.count() << " seconds" << std::endl;
 	/*std::cout << "myGrad_Helper_Vars.dKthdrho1[12]:\n" << myGrad_Helper_Vars.dKthdrho1[12] << std::endl;
 	std::cout << "myGrad_Helper_Vars.dKthdrho1[13]:\n" << myGrad_Helper_Vars.dKthdrho1[13] << std::endl;
 	std::cout << "myGrad_Helper_Vars.dKthdrho1[14]:\n" << myGrad_Helper_Vars.dKthdrho1[14] << std::endl;
@@ -580,7 +580,7 @@ Eigen::MatrixXd ThermalFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	}
 	end_time = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Defining Elemental stiffness penalization time: " << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Defining Elemental stiffness penalization time: " << duration.count() << " seconds" << std::endl;
 	
 	start_time = std::chrono::high_resolution_clock::now();
 	//VectorXi x_y_front_nodes = VectorXi::LinSpaced(nelx*(nely+1), nely+1, (nelx+1)*(nely+1)-1);
@@ -600,7 +600,7 @@ Eigen::MatrixXd ThermalFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	}
 	end_time = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Defining Nodal stiffness penalization time: " << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Defining Nodal stiffness penalization time: " << duration.count() << " seconds" << std::endl;
 	
 	start_time = std::chrono::high_resolution_clock::now();
 	//std::cout << "Rho size: " << Rho.rows() << "x" << Rho.cols() << std::endl;
@@ -617,7 +617,7 @@ Eigen::MatrixXd ThermalFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	}
 	end_time = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Creating T matrix: " << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Creating T matrix: " << duration.count() << " seconds" << std::endl;
 
 	start_time = std::chrono::high_resolution_clock::now();
 	//Solve the thermal Problem Matrix System
@@ -636,7 +636,7 @@ Eigen::MatrixXd ThermalFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 
 	end_time = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Initializing Matrix for free and fixed dofs indexing: " << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Initializing Matrix for free and fixed dofs indexing: " << duration.count() << " seconds" << std::endl;
 
 	//int numThreads = Eigen::nbThreads();
     //std::cout << "Number of threads: " << numThreads << std::endl;
@@ -669,7 +669,7 @@ Eigen::MatrixXd ThermalFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	myGrad_Helper_Vars.th_freedofs = freedofs;
 	end_time = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Inseting values into the Kg and T fixed and free dofs: " << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Inseting values into the Kg and T fixed and free dofs: " << duration.count() << " seconds" << std::endl;
 
 	start_time = std::chrono::high_resolution_clock::now();
 	MatrixXd Pg = P_freedofs - Kg_freefixed * T_fixeddofs;
@@ -709,7 +709,7 @@ Eigen::MatrixXd ThermalFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	
 	end_time = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Solving Linear System time: " << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Solving Linear System time: " << duration.count() << " seconds" << std::endl;
 	myFea.Vel = Vel;
 	myFea.Kappa_Tau = Kappa_Tau;
 

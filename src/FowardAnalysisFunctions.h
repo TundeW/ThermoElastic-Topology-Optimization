@@ -9,9 +9,13 @@ typedef struct {
     double MaxStress;
 	double HeatTransferRate;
 	double PressureDrop;
+	double HF_VolFrac;
 	Eigen::MatrixXd dMaxStress_dx;
 	Eigen::MatrixXd dHeatTransferRate_dx;
 	Eigen::MatrixXd dPressureDrop_dx;
+	Eigen::MatrixXd circDom;
+	Eigen::MatrixXd dcircDom_dx;
+	Eigen::MatrixXd dHF_VolFracdx;
 
 } CAND_OBJ_GRAD;
 

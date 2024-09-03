@@ -53,7 +53,7 @@ Eigen::MatrixXd ElasticFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	int ndof = dim * (nodemap.maxCoeff() + 1);
 	//MatrixXd Kg;
 	//Kg = MatrixXd::Zero(ndof, ndof); //Change 8 to 2**dim
-	std::cout << "Creating Elastic Stiffness Sparse Matrix" << std::endl;
+	//***std::cout << "Creating Elastic Stiffness Sparse Matrix" << std::endl;
 	//Eigen::SparseMatrix<double> Kg(ndof, ndof);
 	//Kg.reserve(VectorXi::Constant(ndof,81));
 
@@ -143,10 +143,19 @@ Eigen::MatrixXd ElasticFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 		double Te = Te_vect(0,0);
 		double dTe = Te - Tenv;
 
+		/*//Strain Thermal
+		double rho = 1e-3 + (1 - 1e-3)*(1-Rho(i,0));
+		strain_thermal.col(i) = pow(rho,3) * alpha * dTe * A;
+		myGrad_Helper_Vars.dstrain_thermaldrho1[i] = - (1 - 1e-3) * 3 * pow(rho,2) * alpha * dTe * A;
+		myGrad_Helper_Vars.dstrain_thermaldrho2[i] = 0 * alpha * dTe * A;
+		myGrad_Helper_Vars.dstrain_thermaldt[i] = pow(rho,3) * alpha * A * N.transpose();*/
+
+		// Alternative Strain Thermal
 		strain_thermal.col(i) = pow((1-Rho(i,0)),3) * alpha * dTe * A;
 		myGrad_Helper_Vars.dstrain_thermaldrho1[i] = - 3 * pow((1-Rho(i,0)),2) * alpha * dTe * A;
 		myGrad_Helper_Vars.dstrain_thermaldrho2[i] = 0 * alpha * dTe * A;
 		myGrad_Helper_Vars.dstrain_thermaldt[i] = pow((1-Rho(i,0)),3) * alpha * A * N.transpose();
+		
 
 		/*if (dim == 2) {
 			strain_thermal.col(i) << alpha*dTe, alpha*dTe, 0;
@@ -199,7 +208,7 @@ Eigen::MatrixXd ElasticFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	}
 	auto end_time = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Elastic Stiffness Matrix time: " << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Elastic Stiffness Matrix time: " << duration.count() << " seconds" << std::endl;
     
 	start_time = std::chrono::high_resolution_clock::now();
 	myFea.strain_thermal = strain_thermal;
@@ -268,7 +277,7 @@ Eigen::MatrixXd ElasticFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	MatrixXd U = MatrixXd::Zero(ndof, 1);
 	end_time = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Elastic Boundary Conditions time: " << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Elastic Boundary Conditions time: " << duration.count() << " seconds" << std::endl;
     
 
 	/*for (int a = 0; a < fixeddofs.cols(); a++) {
@@ -321,7 +330,7 @@ Eigen::MatrixXd ElasticFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	myGrad_Helper_Vars.el_freedofs = freedofs;
 	end_time = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Inseting values into the Kg and U fixed and free dofs:" << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Inseting values into the Kg and U fixed and free dofs:" << duration.count() << " seconds" << std::endl;
 	
 	start_time = std::chrono::high_resolution_clock::now();
 	//MatrixXd Pg = P_freedofs - Kg_freefixed * U_fixeddofs;
@@ -339,7 +348,7 @@ Eigen::MatrixXd ElasticFea(const Eigen::MatrixXd Rho, const MESH myMesh, const E
 	}
 	end_time = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
-    std::cout << "Solving Elastic Linear System time: " << duration.count() << " seconds" << std::endl;
+    //***std::cout << "Solving Elastic Linear System time: " << duration.count() << " seconds" << std::endl;
     
 
 	return U;
