@@ -1,3 +1,0 @@
-/root/DEV/FEA Based Solver/FEA Based Solver/build/CMakeFiles/HeatExchanger.dir
-/root/DEV/FEA Based Solver/FEA Based Solver/build/CMakeFiles/edit_cache.dir
-/root/DEV/FEA Based Solver/FEA Based Solver/build/CMakeFiles/rebuild_cache.dir

@@ -1,5 +1,0 @@
-https://eigen.tuxfamily.org/dox/GettingStarted.html#title0
-Figure out how to copy Eigen to the include folder to get it working, without having to include each time you compile
-
-g++ -I /mnt/c/Users/wbello3/toolbox/eigen-3.4.0 Main.cpp -o main_cpp
-./main_cpp

@@ -159,7 +159,7 @@ void WriteVtu(const Eigen::MatrixXd Rho, const MESH myMesh, const FEA myFea) {
 
 	// Write file.
   	vtkNew<vtkXMLUnstructuredGridWriter> writer;
-	std::string filename = "Results/HeatExchangerResults" + std::to_string(myMesh.opt_iter) + ".vtu";
+	std::string filename = "HeatExchangerResults.vtu";
   	writer->SetFileName(filename.c_str());
   	writer->SetInputData(unstructuredGrid);
   	writer->Write();

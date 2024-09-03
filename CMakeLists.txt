@@ -37,7 +37,6 @@ set(source_files
     "${source_dir}/ThermalFeaFunction.cpp"
     "${source_dir}/ElasticFeaFunction.cpp"
     "${source_dir}/WriteVtuFunction.cpp"
-    "${source_dir}/WriteOutputFunctions.cpp"
     # ... other source files ...
 )
 
